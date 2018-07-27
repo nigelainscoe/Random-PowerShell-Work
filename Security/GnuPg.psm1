@@ -32,7 +32,7 @@
 		
 		[Parameter()]
 		[ValidateNotNullOrEmpty()]
-		[string]$DownloadUrl = 'http://files.gpg4win.org/gpg4win-2.2.5.exe'
+		[string]$DownloadUrl = 'http://files.gpg4win.org/gpg4win-3.1.2.exe'
 		
 	)
 	process {

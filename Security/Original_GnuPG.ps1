@@ -91,7 +91,7 @@ function Add-Encryption {
 
 		[Parameter(Mandatory)]
 		[ValidateNotNullOrEmpty()]
-		[SecureString]$Password,
+		[String]$Password,
 
 		[Parameter()]
 		[ValidateNotNullOrEmpty()]
@@ -146,7 +146,7 @@ function Remove-Encryption {
 
 		[Parameter(Mandatory)]
 		[ValidateNotNullOrEmpty()]
-		[SecureString]$Password,
+		[String]$Password,
 
 		[Parameter()]
 		[ValidateNotNullOrEmpty()]

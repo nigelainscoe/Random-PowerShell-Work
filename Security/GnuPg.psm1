@@ -153,12 +153,17 @@ function Remove-Encryption {
 
         [Parameter()]
         [ValidateNotNullOrEmpty()]
-        [string]$GpgPath = 'C:\Program Files (x86)\GNU\GnuPG\gpg2.exe'
+        [string]$GpgPath = 'C:\Program Files (x86)\GNU\GnuPG\gpg2.exe',
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [string]$EncryptionSuffix = '.gpg'
     )
     process {
         try {
-            Get-ChildItem -Path $FolderPath -Filter '*.gpg' | ForEach-Object {
-                $decryptFilePath = $_.FullName.TrimEnd('.gpg')
+ 
+            Get-ChildItem -Path $FolderPath -Filter *$EncryptionSuffix | ForEach-Object {
+                $decryptFilePath = $_.FullName.TrimEnd($EncryptionSuffix)
                 Write-Verbose -Message "Decrypting [$($_.FullName)] to [$($decryptFilePath)]"
                 $startProcParams = @{
                     'FilePath'     = $GpgPath
@@ -168,7 +173,7 @@ function Remove-Encryption {
                 }
                 $null = Start-Process @startProcParams
             }
-            Get-ChildItem -Path $FolderPath | Where-Object {$_.Extension -ne 'gpg'}
+            Get-ChildItem -Path $FolderPath | Where-Object {$_.Extension -ne $EncryptionSuffix}
         }
         catch {
             Write-Error $_.Exception.Message
@@ -215,11 +220,13 @@ function Remove-EncryptionFromFile {
         [Parameter()]
         [ValidateNotNullOrEmpty()]
         [string]$GpgPath = 'C:\Program Files (x86)\GNU\GnuPG\gpg2.exe'
+
     )
     process {
         try {
-            $decryptFilePath = $FilePath.TrimEnd('.gpg')
-            Write-Verbose -Message "Decrypting [$($FilePath)] to [$($decryptFilePath)]"
+            $EncryptionSuffix = [IO.Path]::GetExtension($FilePath)
+            $decryptFilePath = $FilePath.TrimEnd($EncryptionSuffix)
+                Write-Verbose -Message "Decrypting [$($FilePath)] to [$($decryptFilePath)]"
             $startProcParams = @{
                 'FilePath'     = $GpgPath
                 'ArgumentList' = "--batch --yes --passphrase $Password -o $decryptFilePath -d $FilePath"

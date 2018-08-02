@@ -32,7 +32,7 @@ function Install-GnuPg {
 
         [Parameter()]
         [ValidateNotNullOrEmpty()]
-        [string]$DownloadUrl = 'http://files.gpg4win.org/gpg4win-2.2.1.exe'
+        [string]$DownloadUrl = 'http://files.gpg4win.org/gpg4win-2.2.5.exe'
 
     )
     process {
@@ -126,10 +126,14 @@ function Remove-Encryption {
 	.PARAMETER Password
 		The password that was used to encrypt the files.
 
-	.EXAMPLE
-		PS> Remove-Encryption -FolderPath C:\MyFolder -Password secret
+        .PARAMETER EncryptionSuffix
+		The File extension of the files to be decrypted, e.g. .gpg or .pgp.
 
-		This example will attempt to decrypt all files inside of the C:\MyFolder folder using the password of 'secret'
+	.EXAMPLE
+		PS> Remove-Encryption -FolderPath C:\MyFolder -Password secret -EncryptionSuffix '.foo'
+
+        This example will attempt to decrypt all files inside of the C:\MyFolder folder with a 
+        file extension of .foo using the password of 'secret'
 
 	.INPUTS
 		None. This function does not accept pipeline input.
@@ -191,10 +195,15 @@ function Remove-EncryptionFromFile {
 	.PARAMETER Password
 		The password for the secret key.
 
-	.EXAMPLE
-		PS> Remove-EncryptionFromFile -FileName F:\MyFolder\MyFile.txt.gpg -Password VeryVerySecret
 
-		This example will attempt to decrypt F:\MyFolder\MyFile.txt.gpg to F:\MyFolder\MyFile.txt 
+    .PARAMETER EncryptionSuffix
+		The File extension of the files to be decrypted, e.g. .gpg or .pgp.
+
+
+	.EXAMPLE
+		PS> Remove-EncryptionFromFile -FileName F:\MyFolder\MyFile.txt.abc -Password VeryVerySecret
+
+		This example will attempt to decrypt F:\MyFolder\MyFile.txt.abc to F:\MyFolder\MyFile.txt 
 		using the password of 'VeryVerySecret'
 
 	.INPUTS
